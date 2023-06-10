@@ -1,0 +1,85 @@
+*{
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+.container{
+  width: 700px;
+  /* background-color: red; */
+  margin: 30px auto;
+  padding: 10px;
+}
+
+.btn{
+  padding: 7px 15px;
+
+  font-size: 18px;
+  border-radius: 8px;
+}
+.btn-add{
+  background-color: rgb(7, 11, 231);
+  color: white;
+}
+.addContainer{
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.addContainer form{
+  width: 420px;
+  background-color: white;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  padding: 50px 30px;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+}
+.addContainer form input{
+  padding: 9px;
+  font-size: 15px;
+  margin-top: 6px;
+}
+.addContainer form label{
+  font-size: 18px;
+  margin-top: 14px;
+
+
+}
+.addContainer form button{
+ margin-top: 15px;
+ background-color: rgb(45, 81, 212);
+ font-weight: bold;
+ border-radius: 6px;
+ color: white;
+
+
+}
+.addContainer form .close-btn{
+ margin-left: auto;
+font-size: 20px;
+cursor: pointer;
+border: 1px solid black;
+border-radius: 50%;
+display: flex;
+justify-content: center;
+padding: 1px;
+}
+
+.btn-edit{
+padding: 2px 12px;
+background-color: green;
+color: white;
+font-weight: bold;
+}
+.btn-delete{
+padding: 2px 12px;
+background-color: red;
+color: white;
+font-weight: bold;
+margin-left: 19px;
+}
