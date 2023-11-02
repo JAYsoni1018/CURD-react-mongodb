@@ -65,4 +65,7 @@ app.delete("/delete/:id", async (req, res) => {
     res.send({ success: true, message: "User Delete successfully!!", data: data })
 
 });
+
+
+
 app.listen(PORT, () => console.log("server is running at port :" + PORT));

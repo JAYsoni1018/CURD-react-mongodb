@@ -83,3 +83,6 @@ color: white;
 font-weight: bold;
 margin-left: 19px;
 }
+.row {
+  width: 60px;
+}

@@ -52,20 +52,39 @@ function App() {
     }
   }
 
+  const validateFields = (fields) => {
+    for (const field of fields) {
+      if (formData[field].trim() === '') {
+        return false; // Field is empty, validation fails
+      }
+    }
+    return true; // All fields are non-empty, validation passes
+  };
 
   const handelSubmit = async (e) => {
     e.preventDefault();
-    const data = await axios.post("/create", formData);
-    // console.log(formData)
-    // console.log(data)
-    if (data.data.success) {
-      setaddSection(false)
-      alert(data.data.message)
-      getFetchData();
+
+    const fieldsToValidate = ["name", "email", "mobile"];
+
+    if (validateFields(fieldsToValidate)) {
+      const data = await axios.post("/create", formData);
+      if (data.data.success) {
+        setaddSection(false);
+        setformData({
+          "name": "",
+          "email": "",
+          "mobile": "",
+        });
+        alert(data.data.message);
+        getFetchData();
+      } else {
+        alert('Failed to add user to the database.');
+      }
+    } else {
+      alert('Please fill all fields');
     }
+  };
 
-
-  }
 
   const handelDelete = async (e) => {
     const id = e._id;
@@ -137,14 +156,14 @@ function App() {
           : ""
       }
 
-      <table className="pure-table">
+      <table className="pure-table" >
         <thead>
           <tr>
-            <th>No.</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Action</th>
+            <th class="row">No.</th>
+            <th class="row" style={{ width: "200px" }}>Name</th>
+            <th class="row">Email</th>
+            <th class="row">Mobile</th>
+            <th class="row" style={{ width: "800px" }}>Action</th>
           </tr>
         </thead>
 
