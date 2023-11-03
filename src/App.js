@@ -6,30 +6,29 @@ import MyForm from './components/MyForm';
 
 
 
+
 function App() {
-  axios.defaults.baseURL = "http://localhost:8080/"
+  axios.defaults.baseURL = 'https://crud-mongodb-1ssp.onrender.com';
 
-  const [addSection, setaddSection] = useState(false)
-  const [editSection, seteditSection] = useState(false)
-  const [dataList, setdataList] = useState([])
-
+  const [addSection, setaddSection] = useState(false);
+  const [editSection, seteditSection] = useState(false);
+  const [dataList, setdataList] = useState([]);
   const [formData, setformData] = useState({
     "name": "",
     "email": "",
     "mobile": "",
-  })
+  });
 
   const [formDataEdit, setformDataEdit] = useState({
     "name": "",
     "email": "",
     "mobile": "",
     "_id": ""
-  })
+  });
   useEffect(() => {
     getFetchData();
-  }, [])
+  }, []);
   // console.log(dataList)
-
 
   //functions
   const handelOnChange = (e) => {
@@ -44,63 +43,6 @@ function App() {
   }
 
 
-  const getFetchData = async () => {
-    const data = await axios.get("/");
-    // console.log(data)
-    if (data.data.success) {
-      setdataList(data.data.data)
-    }
-  }
-
-  const validateFields = (fields) => {
-    for (const field of fields) {
-      if (formData[field].trim() === '') {
-        return false; // Field is empty, validation fails
-      }
-    }
-    return true; // All fields are non-empty, validation passes
-  };
-
-  const handelSubmit = async (e) => {
-    e.preventDefault();
-
-    const fieldsToValidate = ["name", "email", "mobile"];
-
-    if (validateFields(fieldsToValidate)) {
-      const data = await axios.post("/create", formData);
-      if (data.data.success) {
-        setaddSection(false);
-        setformData({
-          "name": "",
-          "email": "",
-          "mobile": "",
-        });
-        alert(data.data.message);
-        getFetchData();
-      } else {
-        alert('Failed to add user to the database.');
-      }
-    } else {
-      alert('Please fill all fields');
-    }
-  };
-
-
-  const handelDelete = async (e) => {
-    const id = e._id;
-
-    const deletedata = await axios.delete(`/delete/${id}`);
-    if (deletedata.data.success) {
-
-      alert(deletedata.data.message)
-      getFetchData();
-
-    }
-  }
-  const handelEdit = async (e) => {
-    seteditSection(true)
-    setformDataEdit(e)
-  }
   const handelOnChangeEdit = (e) => {  //same logic as handelOnChange
     const { value, name } = e.target;
     setformDataEdit((preve) => {
@@ -111,19 +53,125 @@ function App() {
       }
     })
   }
-  const handelUpdate = async (e) => {     //same logic as handelSubmit
-    e.preventDefault();
-    const data = await axios.put("/update", formDataEdit);
-    // console.log(formData)
-    // console.log(data)
-    if (data.data.success) {
-      getFetchData();
-      seteditSection(false)
-      alert(data.data.message)
+
+  const getFetchData = async () => {
+    try {
+      const url = '/';
+      const response = await axios.get(url);
+      if (response.data.success) {
+        setdataList(response.data.data);
+      } else {
+        alert('Failed to fetch data from the server.');
+      }
+    } catch (error) {
+      console.error('An error occurred while fetching data:', error);
+      alert('An error occurred while fetching data from the server.');
     }
+  };
 
 
-  }
+  const validateFields = (fields) => {
+    for (const field of fields) {
+      if (formData[field].trim() === '') {
+        return false; // Field is empty, validation fails
+      }
+    }
+    return true;  
+  };
+
+  const handelSubmit = async (e) => {
+    e.preventDefault();
+
+    const fieldsToValidate = ["name", "email", "mobile"];
+
+    if (validateFields(fieldsToValidate)) {
+      const url = '/create';
+      const data = {
+        name: formData.name,
+        email: formData.email,
+        mobile: formData.mobile,
+      };
+      try {
+        const response = await axios.post(url, data);
+        if (response.data.success) {
+          setaddSection(false);
+          setformData({
+            "name": "",
+            "email": "",
+            "mobile": "",
+          });
+          alert(response.data.message);
+          getFetchData();
+        } else {
+          alert('Failed to add user to the database.');
+        }
+      } catch (error) {
+        console.error('An error occurred while adding the user:', error);
+        alert('An error occurred while adding the user.');
+      }
+    } else {
+      alert('Please fill all fields');
+    }
+  };
+
+  const handelDelete = async (e) => {
+    const id = e._id;
+    const url = `/delete/${id}`;  
+
+    try {
+      const deletedata = await axios.delete(url);
+      if (deletedata.data.success) {
+        alert(deletedata.data.message);
+        getFetchData();
+      } else {
+        alert('Failed to delete the user.');
+      }
+    } catch (error) {
+      console.error('An error occurred while deleting the user:', error);
+      alert('An error occurred while deleting the user.');
+    }
+  };
+
+  const handelEdit = (e) => {
+    seteditSection(true);
+    setformDataEdit(e);
+  };
+
+  const handelUpdate = async (e) => {
+    e.preventDefault();
+
+    const requiredFields = ["name", "email", "mobile"];
+
+    const isEmptyField = requiredFields.some(field => formDataEdit[field].trim() === '');
+
+    if (isEmptyField) {
+      alert('Please fill in all required fields before updating.');
+    } else {
+      const url = '/update';
+      const data = {
+        name: formDataEdit.name,
+        email: formDataEdit.email,
+        mobile: formDataEdit.mobile,
+        _id: formDataEdit._id,
+      };
+
+      try {
+        const response = await axios.put(url, data);
+        if (response.data.success) {
+          getFetchData();
+          seteditSection(false);
+          alert(response.data.message);
+        } else {
+          alert('Failed to update user data.');
+        }
+      } catch (error) {
+        console.error('An error occurred while updating user data:', error);
+        alert('An error occurred while updating user data.');
+      }
+    }
+  };
+
+
 
   return (
     <div className="container mt-3">
@@ -159,11 +207,11 @@ function App() {
       <table className="pure-table" >
         <thead>
           <tr>
-            <th class="row">No.</th>
-            <th class="row" style={{ width: "200px" }}>Name</th>
-            <th class="row">Email</th>
-            <th class="row">Mobile</th>
-            <th class="row" style={{ width: "800px" }}>Action</th>
+            <th className="row">No.</th>
+            <th className="row" style={{ width: "200px" }}>Name</th>
+            <th className="row">Email</th>
+            <th className="row">Mobile</th>
+            <th className="row" style={{ width: "800px" }}>Action</th>
           </tr>
         </thead>
 
