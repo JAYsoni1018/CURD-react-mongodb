@@ -4,7 +4,7 @@ import MyForm from './MyForm';
 
 function Home() {
 
-    axios.defaults.baseURL = 'https://crud-mongodb-1ssp.onrender.com';
+    axios.defaults.baseURL = 'https://crud-mongodb-iqqa.onrender.com';
 
     const [addSection, setaddSection] = useState(false);
     const [editSection, seteditSection] = useState(false);

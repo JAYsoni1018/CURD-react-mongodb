@@ -8,7 +8,7 @@ import Home from './components/Home';
 
 
 function App() {
-  axios.defaults.baseURL = 'https://crud-mongodb-1ssp.onrender.com';
+  axios.defaults.baseURL = 'https://crud-mongodb-iqqa.onrender.com';
 
 
 
